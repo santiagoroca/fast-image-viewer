@@ -29,24 +29,6 @@ class Handler {
 	}
 
 	/**
-	 * [load description]
-	 * @return {Promise} [description]
-	 */
-	load () {}
-
-	/**
-	 * [Defined by children handler]
-	 * @return {Promise} [description]
-	 */
-	draw () {}
-
-	/**
-	 * [Clear all references]
-	 * @return {[type]} [description]
-	 */
-	clear () {}
-
-	/**
 	 * [Scale the Canvas scale * BASE_WIDTH(512)]
 	 * @return {[type]} [description]
 	 */
@@ -65,6 +47,24 @@ class Handler {
 	__getAt (x, y) {
 		//return an image data from x, y, to 512, 512
 	}
+
+	/**
+	 * [load description]
+	 * @return {Promise} [description]
+	 */
+	load () {}
+
+	/**
+	 * [Defined by children handler]
+	 * @return {Promise} [description]
+	 */
+	draw () {}
+
+	/**
+	 * [Clear all references]
+	 * @return {[type]} [description]
+	 */
+	clear () {}
 
 }
 
