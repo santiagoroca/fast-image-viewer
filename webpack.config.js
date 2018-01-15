@@ -8,7 +8,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'fastsvgviewer.js'
+        filename: 'fastsvgviewer.js',
         library: 'FastSvgViewer',
         publicPath: 'http://localhost:8080/built'
     },
