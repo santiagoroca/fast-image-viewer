@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --coverage --verbose"
+    "test": "jest"
   },
   "keywords": [
     "svg",
