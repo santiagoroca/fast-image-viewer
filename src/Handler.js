@@ -1,16 +1,44 @@
 class Handler {
 
 	/**
-	 * [Defined by children handler]
-	 * @return {[type]} [description]
-	 */
-	draw () {}
-
-	/**
 	 * [Load resource]
 	 * @return {[type]} [description]
 	 */
+	constructor (file) {
+		this.BASE_SIZE = 512;
+		this.SIZE = BASE_SIZE;
+		//Create canvas
+		//call load
+		//call draw
+	}
+
+	/**
+	 * [Create a new canvas with the desired size]
+	 * @return {[type]} [description]
+	 */
+	__createCanvas () {
+		//Create new canvas using the this.SIZE
+	}
+
+	/**
+	 * [Delete currently active canvas]
+	 * @return {[type]} [description]
+	 */
+	__deleteCanvas () {
+
+	}
+
+	/**
+	 * [load description]
+	 * @return {Promise} [description]
+	 */
 	load () {}
+
+	/**
+	 * [Defined by children handler]
+	 * @return {Promise} [description]
+	 */
+	draw () {}
 
 	/**
 	 * [Clear all references]
@@ -22,8 +50,10 @@ class Handler {
 	 * [Scale the Canvas scale * BASE_WIDTH(512)]
 	 * @return {[type]} [description]
 	 */
-	resize (scale) {
-		
+	__resize (scale) {
+		this.SIZE = this.BASE_SIZE * scale;
+		//Resize canvas
+		//call redraw
 	}
 
 	/**
@@ -32,8 +62,8 @@ class Handler {
 	 * @param  {[type]} y [description]
 	 * @return {[type]}   [description]
 	 */
-	getAt (x, y) {
-
+	__getAt (x, y) {
+		//return an image data from x, y, to 512, 512
 	}
 
 }
