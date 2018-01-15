@@ -1,0 +1,32 @@
+{
+  "name": "fast-svg-viewer",
+  "version": "0.0.1",
+  "description": "Viewer optimized to use huge SVG files",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --coverage --verbose"
+  },
+  "keywords": [
+    "svg",
+    "viewer",
+    "canvas",
+    "optimized",
+    "huge",
+    "big",
+    "performance",
+    "performant",
+    "2d",
+    "svgjs"
+  ],
+  "author": "Santiago Roca",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-loader": "^7.1.2",
+    "jest": "^22.1.1",
+    "webpack": "^3.10.0"
+  }
+}
