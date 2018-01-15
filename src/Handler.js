@@ -1,70 +1,89 @@
 class Handler {
 
-	/**
-	 * [Load resource]
-	 * @return {[type]} [description]
-	 */
-	constructor (file) {
-		this.BASE_SIZE = 512;
-		this.SIZE = BASE_SIZE;
-		//Create canvas
-		//call load
-		//call draw
-	}
+    /**
+     * [Load resource]
+     * @return {[type]} [description]
+     */
+    constructor (url) {
+        this.BASE_SIZE = 512;
+        this.SIZE = BASE_SIZE;
+        BASE_URL =  url
 
-	/**
-	 * [Create a new canvas with the desired size]
-	 * @return {[type]} [description]
-	 */
-	__createCanvas () {
-		//Create new canvas using the this.SIZE
-	}
+        this.__createCanvas();
 
-	/**
-	 * [Delete currently active canvas]
-	 * @return {[type]} [description]
-	 */
-	__deleteCanvas () {
+        this.load(BASE_URL)
+            .then(this.draw);
+    }
 
-	}
+    /**
+     * [Create a new canvas with the desired size]
+     * @return {[type]} [description]
+     */
+    __createCanvas () {
+        this.canvas = document.createElement('canvas');
 
-	/**
-	 * [Scale the Canvas scale * BASE_WIDTH(512)]
-	 * @return {[type]} [description]
-	 */
-	__resize (scale) {
-		this.SIZE = this.BASE_SIZE * scale;
-		//Resize canvas
-		//call redraw
-	}
+        //Set Canvas Size
+        this.canvas.width = this.SIZE;
+        this.canvas.height = this.SIZE;
 
-	/**
-	 * [Return the image data matching the coordinates x, y, 512, 512]
-	 * @param  {[type]} x [description]
-	 * @param  {[type]} y [description]
-	 * @return {[type]}   [description]
-	 */
-	__getAt (x, y) {
-		//return an image data from x, y, to 512, 512
-	}
+        //Create 2D context 
+        this.ctx = this.canvas.getContext('2d');
+    }
 
-	/**
-	 * [load description]
-	 * @return {Promise} [description]
-	 */
-	load () {}
+    /**
+     * [Delete currently active canvas]
+     * @return {[type]} [description]
+     */
+    __deleteCanvas () {
+        this.canvas = null;
+        this.ctx = null;
+    }
 
-	/**
-	 * [Defined by children handler]
-	 * @return {Promise} [description]
-	 */
-	draw () {}
+    /**
+     * [generate new draw when the scale changed]
+     * @param  {[int]} scale [size]
+     * @return {[type]}  [description]
+     */
+    __resize (scale) {
+        this.SIZE = this.BASE_SIZE * scale;
 
-	/**
-	 * [Clear all references]
-	 * @return {[type]} [description]
-	 */
-	clear () {}
+        this.__deleteCanvas();
+
+        this.__createCanvas();
+
+        this.draw();
+    }
+
+    /**
+     * [Return the image data matching the coordinates x, y, 512, 512]
+     * @param  {[int]} x [coordinate x of canvas slice to redraw]
+     * @param  {[int]} y [coordinate y of canvas slice to redraw]
+     * @return {[ImageData]}  [New ImageData from canvas slice]
+     */
+    __getAt (x, y) {
+        return this.ctx.getImageData(x, y, this.BASE_SIZE, this.BASE_SIZE);
+    }
+
+    /**
+     * [load description]
+     * @return {Promise} [description]
+     */
+    load (BASE_URL) {
+        new Promise()._resolve();
+    }
+
+    /**
+     * [Draw imageData]
+     * @return {void}
+     */
+    draw () {}
+
+    /**
+     * [Clear all references]
+     * @return {[type]} [description]
+     */
+    clear () {
+    }
 
 }
 
