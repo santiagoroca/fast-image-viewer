@@ -28,7 +28,7 @@ class GridSystem {
 	 * [Choose which Grid to render, if it has changed, clean all other Grids and ask handler to resize to correct size]
 	 * @return {[type]} [description]
 	 */
-	render (projMatrix, mvMatrix, rect, webgl, shader) {
+	render (projMatrix, rect, webgl, shader, mvMatrix, planes) {
 	    const raycastHitPosition = MathHelper.getRaycastHitCoordinates(
             projMatrix,
             mvMatrix,
@@ -41,7 +41,6 @@ class GridSystem {
 	            index = Math.min(Math.max(0, index), this.division_ratio - 1);
 	            index = this.division_ratio - 1 - parseInt(index);
 
-	            console.log(index);
             if (this.activeIndex != index) {
                 this.activeGrid.deactivate(webgl);
                 this.activeIndex = index;
@@ -51,7 +50,7 @@ class GridSystem {
             }
         }
 
-        this.activeGrid.render(webgl, shader);
+        this.activeGrid.render(webgl, shader, planes);
 	}
 
 }

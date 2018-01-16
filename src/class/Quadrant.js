@@ -7,17 +7,46 @@ class Quadrant {
 	 * @return {[type]} [description]
 	 */
 	constructor (handler, webgl, scale, x, y) {
+	    this.handler = handler;
+	    this.webgl = webgl;
+	    this.scale = scale;
+	    this.x = x;
+	    this.y = y;
 
         let quadrant_size = (1 / scale),
             min_x = x * quadrant_size,
-            max_x = x * quadrant_size + quadrant_size,
-            min_y = y * quadrant_size,
-            max_y = y * quadrant_size + quadrant_size;
+            min_y = y * quadrant_size;
+
+        //This will define a "sphere" through which we'll
+        //Determine if the current quadrant is, or not visible
+        //For the current frustum
+        //TODO Fix the ratio to point to the corner of the square
+        const cx = min_x + quadrant_size / 2;
+        const cy = min_y + quadrant_size / 2;
+        const m_t_c = [cx - min_x, cy - min_y];
+        const length = Math.sqrt(m_t_c[0] * m_t_c[0] + m_t_c[1] * m_t_c[1]);
+        this.sphere = {
+            x: cx,
+            y: cy,
+            z: 0,
+            r: length
+        };
+
+        //Quadrant not intialized and not ready to render
+        this.initialized = false;
+	}
+
+	build () {
+        let quadrant_size = (1 / this.scale),
+            min_x = this.x * quadrant_size,
+            max_x = this.x * quadrant_size + quadrant_size,
+            min_y = this.y * quadrant_size,
+            max_y = this.y * quadrant_size + quadrant_size;
 
         //Bind Data to Buffers and Upload to WebGL
-        this.verticesBuffer = webgl.createBuffer();
-        webgl.bindBuffer(webgl.ARRAY_BUFFER, this.verticesBuffer);
-        webgl.bufferData(webgl.ARRAY_BUFFER, new Float32Array([
+        this.verticesBuffer = this.webgl.createBuffer();
+        this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, this.verticesBuffer);
+        this.webgl.bufferData(this.webgl.ARRAY_BUFFER, new Float32Array([
 
             // front
             min_x, min_y, 0,
@@ -25,17 +54,17 @@ class Quadrant {
             max_x, max_y, 0,
             min_x, max_y, 0
 
-        ]).buffer, webgl.STATIC_DRAW);
+        ]).buffer, this.webgl.STATIC_DRAW);
 
-        quadrant_size = (1 / scale),
-            min_x = x * quadrant_size,
-            max_x = x * quadrant_size + quadrant_size,
-            min_y = 1 - y * quadrant_size - quadrant_size,
+        quadrant_size = (1 / this.scale),
+            min_x = this.x * quadrant_size,
+            max_x = this.x * quadrant_size + quadrant_size,
+            min_y = 1 - this.y * quadrant_size - quadrant_size,
             max_y = min_y + quadrant_size;
 
-        this.transparentBuffer = webgl.createBuffer();
-        webgl.bindBuffer(webgl.ARRAY_BUFFER, this.transparentBuffer);
-        webgl.bufferData(webgl.ARRAY_BUFFER, new Float32Array([
+        this.transparentBuffer = this.webgl.createBuffer();
+        this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, this.transparentBuffer);
+        this.webgl.bufferData(this.webgl.ARRAY_BUFFER, new Float32Array([
 
             // front colors
             min_x, max_y,
@@ -43,11 +72,11 @@ class Quadrant {
             max_x, min_y,
             min_x, min_y
 
-        ]).buffer, webgl.STATIC_DRAW);
+        ]).buffer, this.webgl.STATIC_DRAW);
 
-        this.colorsBuffer = webgl.createBuffer();
-        webgl.bindBuffer(webgl.ARRAY_BUFFER, this.colorsBuffer);
-        webgl.bufferData(webgl.ARRAY_BUFFER, new Float32Array([
+        this.colorsBuffer = this.webgl.createBuffer();
+        this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, this.colorsBuffer);
+        this.webgl.bufferData(this.webgl.ARRAY_BUFFER, new Float32Array([
 
             // front colors
             0.0, 1.0,
@@ -55,43 +84,50 @@ class Quadrant {
             1.0, 0.0,
             0.0, 0.0
 
-        ]).buffer, webgl.STATIC_DRAW);
+        ]).buffer, this.webgl.STATIC_DRAW);
 
-        this.facesBuffer = webgl.createBuffer();
-        webgl.bindBuffer(webgl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
-        webgl.bufferData(webgl.ELEMENT_ARRAY_BUFFER, new Uint32Array([
+        this.facesBuffer = this.webgl.createBuffer();
+        this.webgl.bindBuffer(this.webgl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
+        this.webgl.bufferData(this.webgl.ELEMENT_ARRAY_BUFFER, new Uint32Array([
 
             // front
             0, 1, 2,
             2, 3, 0
 
-        ]).buffer, webgl.STATIC_DRAW);
+        ]).buffer, this.webgl.STATIC_DRAW);
 
         quadrant_size = 512;
-        let canvas_x = x * quadrant_size,
-            canvas_y = scale * quadrant_size - y * quadrant_size - quadrant_size;
+        let canvas_x = this.x * quadrant_size,
+            canvas_y = this.scale * quadrant_size - this.y * quadrant_size - quadrant_size;
 
-        webgl.activeTexture(webgl.TEXTURE0);
-        this.mainTexture = webgl.createTexture();
-        webgl.bindTexture(webgl.TEXTURE_2D, this.mainTexture);
-        webgl.compressedTexImage2D(
-            webgl.TEXTURE_2D,
+        this.webgl.activeTexture(this.webgl.TEXTURE0);
+        this.mainTexture = this.webgl.createTexture();
+        this.webgl.bindTexture(this.webgl.TEXTURE_2D, this.mainTexture);
+        this.webgl.compressedTexImage2D(
+            this.webgl.TEXTURE_2D,
             0,
-            webgl.s3tcExt.COMPRESSED_RGBA_S3TC_DXT1_EXT,
+            this.webgl.s3tcExt.COMPRESSED_RGBA_S3TC_DXT1_EXT,
             quadrant_size,
             quadrant_size,
             0,
-            dxt1.compress(handler.__getAt(canvas_x, canvas_y))
+            dxt1.compress(this.handler.__getAt(canvas_x, canvas_y))
         );
-        webgl.texParameteri(webgl.TEXTURE_2D, webgl.TEXTURE_MAG_FILTER, webgl.NEAREST);
-        webgl.texParameteri(webgl.TEXTURE_2D, webgl.TEXTURE_MIN_FILTER, webgl.LINEAR);
-	}
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MAG_FILTER, this.webgl.NEAREST);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MIN_FILTER, this.webgl.LINEAR);
+
+        //Quadrant already intialized and ready to render
+        this.initialized = true;
+    }
 
 	/**
 	 * [Render single quadrant]
 	 * @return {[type]} [description]
 	 */
 	render (webgl, shader) {
+	    if (!this.initialized) {
+	        this.build()
+        }
+
         webgl.bindTexture(webgl.TEXTURE_2D, this.mainTexture);
 
         webgl.bindBuffer(webgl.ARRAY_BUFFER, this.verticesBuffer);
@@ -117,6 +153,7 @@ class Quadrant {
         webgl.deleteBuffer(this.facesBuffer);
         webgl.deleteBuffer(this.transparentBuffer);
         webgl.deleteTexture(this.mainTexture);
+        webgl.flush();
     }
 
 }

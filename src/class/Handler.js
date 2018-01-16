@@ -51,8 +51,8 @@ class Handler {
      */
     __resize (scale) {
         this.SIZE = this.BASE_SIZE * scale;
-        this.__deleteCanvas();
-        this.__createCanvas();
+        this.canvas.width = this.SIZE;
+        this.canvas.height = this.SIZE;
         this.draw();
     }
 

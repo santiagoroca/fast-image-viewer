@@ -2,6 +2,16 @@ import { vec3, mat4 } from '../lib/gl-matrix'
 
 class Math {
 
+    static testSphereThruPlanes (sphere, planes) {
+        for (let i = 0; i < planes.length; i++) {
+            if (planes[i].x * sphere.x + planes[i].y * sphere.y + planes[i].z * sphere.z + planes[i].w <= -sphere.r) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      *
      * @param x

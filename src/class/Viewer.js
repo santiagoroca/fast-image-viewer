@@ -325,13 +325,86 @@ class Viewer {
         mat4.multiply (pMVPMatrixUniform, this.projectionMatrix, mvMatrix);
         this.webgl.uniformMatrix4fv(this.shader.pPMVatrixUniform, false, pMVPMatrixUniform);
 
+        /*
+            Create the 4 lateral planes
+        */
+        const planes = [
+
+            // // Right clipping plane.
+            // {
+            //     x: pMVPMatrixUniform[8] - pMVPMatrixUniform[0],
+            //     y: pMVPMatrixUniform[9] - pMVPMatrixUniform[1],
+            //     z: pMVPMatrixUniform[10] - pMVPMatrixUniform[2],
+            //     w: pMVPMatrixUniform[11] - pMVPMatrixUniform[3]
+            // },
+            //
+            // // Left clipping plane.
+            // {
+            //     x: pMVPMatrixUniform[8] + pMVPMatrixUniform[0],
+            //     y: pMVPMatrixUniform[9] + pMVPMatrixUniform[1],
+            //     z: pMVPMatrixUniform[10] + pMVPMatrixUniform[2],
+            //     w: pMVPMatrixUniform[11] + pMVPMatrixUniform[3]
+            // },
+            //
+            // // Bottom clipping plane.
+            // {
+            //     x: pMVPMatrixUniform[8] + pMVPMatrixUniform[4],
+            //     y: pMVPMatrixUniform[9] + pMVPMatrixUniform[5],
+            //     z: pMVPMatrixUniform[10] + pMVPMatrixUniform[6],
+            //     w: pMVPMatrixUniform[11] + pMVPMatrixUniform[7]
+            // },
+            //
+            // // Top clipping plane.
+            // {
+            //     x: pMVPMatrixUniform[8] - pMVPMatrixUniform[4],
+            //     y: pMVPMatrixUniform[9] - pMVPMatrixUniform[5],
+            //     z: pMVPMatrixUniform[10] - pMVPMatrixUniform[6],
+            //     w: pMVPMatrixUniform[11] - pMVPMatrixUniform[7]
+            // }
+
+            // Right clipping plane.
+            {
+                x: pMVPMatrixUniform[3] - pMVPMatrixUniform[0],
+                y: pMVPMatrixUniform[7] - pMVPMatrixUniform[4],
+                z: pMVPMatrixUniform[11] - pMVPMatrixUniform[8],
+                w: pMVPMatrixUniform[15] - pMVPMatrixUniform[12]
+            },
+
+            // Left clipping plane.
+            {
+                x: pMVPMatrixUniform[3] + pMVPMatrixUniform[0],
+                y: pMVPMatrixUniform[7] + pMVPMatrixUniform[4],
+                z: pMVPMatrixUniform[11] + pMVPMatrixUniform[8],
+                w: pMVPMatrixUniform[15] + pMVPMatrixUniform[12]
+            },
+
+            // Bottom clipping plane.
+            {
+                x: pMVPMatrixUniform[3] + pMVPMatrixUniform[1],
+                y: pMVPMatrixUniform[7] + pMVPMatrixUniform[5],
+                z: pMVPMatrixUniform[11] + pMVPMatrixUniform[9],
+                w: pMVPMatrixUniform[15] + pMVPMatrixUniform[13]
+            },
+
+            // Top clipping plane.
+            {
+                x: pMVPMatrixUniform[3] - pMVPMatrixUniform[1],
+                y: pMVPMatrixUniform[7] - pMVPMatrixUniform[5],
+                z: pMVPMatrixUniform[11] - pMVPMatrixUniform[9],
+                w: pMVPMatrixUniform[15] - pMVPMatrixUniform[13]
+            }
+
+        ];
+
+
         requestAnimationFrame(() => {
             this.gridSystem.render(
                 this.projectionMatrix,
-                mvMatrix,
                 this.rect,
                 this.webgl,
-                this.shader
+                this.shader,
+                mvMatrix,
+                planes
             )
         });
 	}
