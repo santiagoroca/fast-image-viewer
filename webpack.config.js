@@ -13,6 +13,17 @@ module.exports = {
         publicPath: 'http://localhost:8080/built'
     },
 
+    devServer: {
+        contentBase: './development',
+        host: '0.0.0.0',
+        port: 8080,
+        allowedHosts: [
+            'local.youbim.com',
+            'localhost',
+            '192.168.0.169'
+        ]
+    },
+
     module: {
         loaders: [
             {

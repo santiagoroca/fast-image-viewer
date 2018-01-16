@@ -1,0 +1,122 @@
+<html>
+    <head>
+        <script src="http://localhost:8080/built/fastsvgviewer.js"></script>
+        <style>
+
+            body {
+                margin: 0
+            }
+
+            #viewer-container {
+                width: 100%;
+                height: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="viewer-container"></div>
+        <script>
+
+            class SVGHandler extends FastSvgViewer.Handler {
+
+                /**
+                 * [load description]
+                 * @return {Promise} [description]
+                 */
+                load (BASE_URL) {
+                    let request = new XMLHttpRequest();
+                    let $this = this;
+
+                    request.open('GET', BASE_URL, false);
+                    request.send(null);
+
+                    const documentFragment = document.createDocumentFragment();
+                    const div = document.createElement('div');
+                    documentFragment.appendChild(div);
+                    div.innerHTML = request.responseText;
+                    $this.viewBox = div
+                        .getElementsByTagName('svg')[0]
+                        .getAttribute('viewBox')
+                        .split(' ')
+                        .map(Number);
+
+                    const paths = div.getElementsByTagName('path');
+                    $this.data = [];
+                    for (let i = 0; i < paths.length; i++) {
+                        $this.data[i] = {
+                            path: new Path2D(paths[i].getAttribute('d')),
+                            fill: paths[i].getAttribute('fill')
+                        }
+                    }
+                }
+
+                /**
+                 * [Draw imageData]
+                 * @return {Promise}
+                 */
+                draw () {
+                    return new Promise((resolve, reject) => {
+                        this.clearMapFromSVG(this.calculateMatrixFromViewBox(
+                            this.viewBox, this.SIZE
+                        ));
+
+                        this.context.lineWidth = 20;
+                        this.context.strokeStyle = "#444";
+
+                        for (let i = 0; i < this.data.length; i++) {
+                            this.context.fillStyle = this.data[i].fill;
+                            this.context.fill(this.data[i].path);
+                        }
+
+                        resolve();
+                    });
+                }
+
+                /**
+                 * [calculateMatrixFromViewBox calculate initial matrix from viewBox]
+                 * @param  {[string]} viewBox       [boundingBox svg]
+                 * @param  {[type]} availableWidth  [canvas width value]
+                 * @param  {[type]} availableHeight [canvas height value]
+                 * @return {[array]} matrix         [new matrix considering viewBox and canvas values]
+                 */
+                calculateMatrixFromViewBox (viewBox, size) {
+                    let scaleX = size / viewBox[2];
+                    let scaleY = size / viewBox[3];
+                    let scale = Math.min(scaleX, scaleY);
+
+                    return [scale, 0, 0, scale, 0, 0];
+                }
+
+                /**
+                 *
+                 * @param matrix
+                 */
+                clearMapFromSVG (matrix) {
+                    //Clear previous image
+                    this.context.setTransform(1, 0, 0, 1, 0, 0);
+                    this.context.clearRect(0, 0, this.SIZE, this.SIZE);
+
+                    // Use the identity matrix while clearing the context
+                    CanvasRenderingContext2D.prototype.setTransform.apply(this.context, matrix);
+                }
+
+                /**
+                 * [Clear all references]
+                 * @return {[type]} [description]
+                 */
+                clear () {
+
+                }
+
+            }
+
+            FastSvgViewer.register({
+                'svg': SVGHandler
+            });
+
+            const div = document.getElementById('viewer-container');
+            const fastSVGViewerInstance = new FastSvgViewer.default(div, 'assets/Level_1.svg');
+        </script>
+    </body>
+</html>

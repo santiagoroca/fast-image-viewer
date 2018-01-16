@@ -1,0 +1,30 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'deprecate',
+1 verbose cli   'fast-svg-viewer',
+1 verbose cli   'No longer usable' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 silly mapToRegistry name fast-svg-viewer
+5 silly mapToRegistry using default registry
+6 silly mapToRegistry registry https://registry.npmjs.org/
+7 silly mapToRegistry uri https://registry.npmjs.org/fast-svg-viewer
+8 verbose stack Error: invalid version range: latest
+8 verbose stack     at CachingRegistryClient.deprecate (/usr/share/npm/node_modules/npm-registry-client/lib/deprecate.js:23:15)
+8 verbose stack     at /usr/share/npm/lib/deprecate.js:48:18
+8 verbose stack     at mapToRegistry (/usr/share/npm/lib/utils/map-to-registry.js:55:3)
+8 verbose stack     at EventEmitter.deprecate (/usr/share/npm/lib/deprecate.js:40:3)
+8 verbose stack     at Object.commandCache.(anonymous function) (/usr/share/npm/lib/npm.js:216:13)
+8 verbose stack     at EventEmitter.<anonymous> (/usr/share/npm/bin/npm-cli.js:74:30)
+8 verbose stack     at nextTickCallbackWith0Args (node.js:419:9)
+8 verbose stack     at process._tickCallback (node.js:348:13)
+9 verbose cwd /home/santi/Documentos/Projects/javascript/fast-svg-viewer
+10 error Linux 4.4.0-104-generic
+11 error argv "/usr/bin/nodejs" "/usr/bin/npm" "deprecate" "fast-svg-viewer" "No longer usable"
+12 error node v4.2.6
+13 error npm  v3.5.2
+14 error invalid version range: latest
+15 error If you need help, you may report this error at:
+15 error     <https://github.com/npm/npm/issues>
+16 verbose exit [ 1, true ]

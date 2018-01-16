@@ -1,4 +1,5 @@
+describe('Calculator', function() {
 
-test('Dumy test', () => {
-	expect(1).toEqual(1);
+    it('should add numbers');
+
 });

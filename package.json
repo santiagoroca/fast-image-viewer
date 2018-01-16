@@ -1,14 +1,14 @@
 {
-  "name": "fast-svg-viewer",
+  "name": "fast-image-viewer",
   "version": "0.0.1",
-  "description": "Viewer optimized to use huge SVG files",
+  "description": "Viewer optimized to use huge Image files",
   "main": "index.js",
   "directories": {
     "doc": "docs",
     "test": "test"
   },
   "scripts": {
-    "test": "jest"
+    "start": "./node_modules/.bin/webpack-dev-server"
   },
   "keywords": [
     "svg",
@@ -26,7 +26,15 @@
   "license": "ISC",
   "devDependencies": {
     "babel-loader": "^7.1.2",
+    "jasmine-core": "^2.8.0",
     "jest": "^22.1.1",
-    "webpack": "^3.10.0"
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-requirejs": "^1.1.0",
+    "karma-webpack": "^2.0.9",
+    "requirejs": "^2.3.5",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "2.6.1"
   }
 }
