@@ -14,7 +14,7 @@ class FastSvgViewer {
         }
 
 		//TODO make imports and get extension from file
-		const viewer = new Viewer(new handler(file), container);
+		const viewer = new Viewer(new handler(file, container), container);
 	}
 
 }

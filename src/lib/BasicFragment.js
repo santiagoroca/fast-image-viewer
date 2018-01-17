@@ -8,7 +8,6 @@ let BasicFragment = [
     "uniform sampler2D tSampler;",
 
     "varying vec2 vLightWeighting;",
-    "varying vec2 tLightWeighting;",
 
     "vec3 normals(vec3 pos) {",
     "    vec3 fdx = dFdx(pos);",
@@ -17,7 +16,7 @@ let BasicFragment = [
     "}",
 
     "void main() {",
-    "    gl_FragColor = vec4(texture2D(uSampler, vLightWeighting).rgb, texture2D(tSampler, tLightWeighting).g);",
+    "    gl_FragColor = vec4(texture2D(uSampler, vLightWeighting).rgb, texture2D(tSampler, vLightWeighting).g);",
     "}"
 
 ].join('');

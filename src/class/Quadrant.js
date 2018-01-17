@@ -56,24 +56,6 @@ class Quadrant {
 
         ]).buffer, this.webgl.STATIC_DRAW);
 
-        quadrant_size = (1 / this.scale),
-            min_x = this.x * quadrant_size,
-            max_x = this.x * quadrant_size + quadrant_size,
-            min_y = 1 - this.y * quadrant_size - quadrant_size,
-            max_y = min_y + quadrant_size;
-
-        this.transparentBuffer = this.webgl.createBuffer();
-        this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, this.transparentBuffer);
-        this.webgl.bufferData(this.webgl.ARRAY_BUFFER, new Float32Array([
-
-            // front colors
-            min_x, max_y,
-            max_x, max_y,
-            max_x, min_y,
-            min_x, min_y
-
-        ]).buffer, this.webgl.STATIC_DRAW);
-
         this.colorsBuffer = this.webgl.createBuffer();
         this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, this.colorsBuffer);
         this.webgl.bufferData(this.webgl.ARRAY_BUFFER, new Float32Array([
@@ -96,9 +78,14 @@ class Quadrant {
 
         ]).buffer, this.webgl.STATIC_DRAW);
 
-        quadrant_size = 512;
+        quadrant_size = this.handler.BASE_SIZE;
         let canvas_x = this.x * quadrant_size,
             canvas_y = this.scale * quadrant_size - this.y * quadrant_size - quadrant_size;
+
+        const {
+            defaultMap,
+            transparencyMap
+        } = this.handler.__getAt(canvas_x, canvas_y);
 
         this.webgl.activeTexture(this.webgl.TEXTURE0);
         this.mainTexture = this.webgl.createTexture();
@@ -110,10 +97,29 @@ class Quadrant {
             quadrant_size,
             quadrant_size,
             0,
-            dxt1.compress(this.handler.__getAt(canvas_x, canvas_y))
+            dxt1.compress(defaultMap)
         );
         this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MAG_FILTER, this.webgl.NEAREST);
-        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MIN_FILTER, this.webgl.LINEAR);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MIN_FILTER, this.webgl.NEAREST);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_WRAP_S, this.webgl.CLAMP_TO_EDGE);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_WRAP_T, this.webgl.CLAMP_TO_EDGE);
+
+        this.transparencyTexture = this.webgl.createTexture();
+        this.webgl.activeTexture(this.webgl.TEXTURE1);
+        this.webgl.bindTexture(this.webgl.TEXTURE_2D, this.transparencyTexture);
+        this.webgl.compressedTexImage2D(
+            this.webgl.TEXTURE_2D,
+            0,
+            this.webgl.s3tcExt.COMPRESSED_RGBA_S3TC_DXT1_EXT,
+            this.handler.BASE_SIZE,
+            this.handler.BASE_SIZE,
+            0,
+            dxt1.compress(transparencyMap)
+        );
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MAG_FILTER, this.webgl.NEAREST);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MIN_FILTER, this.webgl.NEAREST);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_WRAP_S, this.webgl.CLAMP_TO_EDGE);
+        this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_WRAP_T, this.webgl.CLAMP_TO_EDGE);
 
         //Quadrant already intialized and ready to render
         this.initialized = true;
@@ -128,6 +134,10 @@ class Quadrant {
 	        this.build()
         }
 
+        this.webgl.activeTexture(this.webgl.TEXTURE1);
+        this.webgl.bindTexture(this.webgl.TEXTURE_2D, this.transparencyTexture);
+
+        this.webgl.activeTexture(this.webgl.TEXTURE0);
         webgl.bindTexture(webgl.TEXTURE_2D, this.mainTexture);
 
         webgl.bindBuffer(webgl.ARRAY_BUFFER, this.verticesBuffer);
@@ -135,9 +145,6 @@ class Quadrant {
 
         webgl.bindBuffer(webgl.ARRAY_BUFFER, this.colorsBuffer);
         webgl.vertexAttribPointer(shader.colorVertexAttribute, 2, webgl.FLOAT, false, 0, 0);
-
-        webgl.bindBuffer(webgl.ARRAY_BUFFER, this.transparentBuffer);
-        webgl.vertexAttribPointer(shader.transparentVertexAttribute, 2, webgl.FLOAT, false, 0, 0);
 
         webgl.bindBuffer(webgl.ELEMENT_ARRAY_BUFFER, this.facesBuffer);
         webgl.drawElements(webgl.TRIANGLES, 6, webgl.UNSIGNED_INT, 0);

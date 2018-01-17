@@ -95,7 +95,7 @@ class Viewer {
         webgl.disable(webgl.DEPTH_TEST);
         webgl.disable(webgl.BLEND);
         webgl.disable(webgl.DITHER);
-        webgl.disable(webgl.POLYGON_OFFSET_FILL);
+        // webgl.disable(webgl.POLYGON_OFFSET_FILL);
         webgl.disable(webgl.SAMPLE_ALPHA_TO_COVERAGE);
         webgl.disable(webgl.SAMPLE_COVERAGE);
         webgl.enable(webgl.CULL_FACE);
@@ -135,12 +135,10 @@ class Viewer {
 
         //Configure Shader attributes
         shaderProgram.vertexPositionAttribute = webgl.getAttribLocation(shaderProgram, "aVertexPosition");
-        shaderProgram.transparentVertexAttribute = webgl.getAttribLocation(shaderProgram, "tVertexColor");
         shaderProgram.colorVertexAttribute = webgl.getAttribLocation(shaderProgram, "aVertexColor");
         shaderProgram.pPMVatrixUniform = webgl.getUniformLocation(shaderProgram, "uPMVMatrix");
 
         webgl.enableVertexAttribArray(shaderProgram.colorVertexAttribute);
-        webgl.enableVertexAttribArray(shaderProgram.transparentVertexAttribute);
         webgl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
         webgl.uniform1i(webgl.getUniformLocation(shaderProgram, "tSampler"), 1);
@@ -330,38 +328,6 @@ class Viewer {
         */
         const planes = [
 
-            // // Right clipping plane.
-            // {
-            //     x: pMVPMatrixUniform[8] - pMVPMatrixUniform[0],
-            //     y: pMVPMatrixUniform[9] - pMVPMatrixUniform[1],
-            //     z: pMVPMatrixUniform[10] - pMVPMatrixUniform[2],
-            //     w: pMVPMatrixUniform[11] - pMVPMatrixUniform[3]
-            // },
-            //
-            // // Left clipping plane.
-            // {
-            //     x: pMVPMatrixUniform[8] + pMVPMatrixUniform[0],
-            //     y: pMVPMatrixUniform[9] + pMVPMatrixUniform[1],
-            //     z: pMVPMatrixUniform[10] + pMVPMatrixUniform[2],
-            //     w: pMVPMatrixUniform[11] + pMVPMatrixUniform[3]
-            // },
-            //
-            // // Bottom clipping plane.
-            // {
-            //     x: pMVPMatrixUniform[8] + pMVPMatrixUniform[4],
-            //     y: pMVPMatrixUniform[9] + pMVPMatrixUniform[5],
-            //     z: pMVPMatrixUniform[10] + pMVPMatrixUniform[6],
-            //     w: pMVPMatrixUniform[11] + pMVPMatrixUniform[7]
-            // },
-            //
-            // // Top clipping plane.
-            // {
-            //     x: pMVPMatrixUniform[8] - pMVPMatrixUniform[4],
-            //     y: pMVPMatrixUniform[9] - pMVPMatrixUniform[5],
-            //     z: pMVPMatrixUniform[10] - pMVPMatrixUniform[6],
-            //     w: pMVPMatrixUniform[11] - pMVPMatrixUniform[7]
-            // }
-
             // Right clipping plane.
             {
                 x: pMVPMatrixUniform[3] - pMVPMatrixUniform[0],
@@ -408,6 +374,10 @@ class Viewer {
             )
         });
 	}
+
+	clear () {
+	    this.gridSystem.clear();
+    }
 
 }
 

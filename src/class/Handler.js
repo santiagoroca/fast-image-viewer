@@ -8,8 +8,11 @@ class Handler {
      * If you extend the constructor remember to call super
      * @return {[type]} [description]
      */
-    constructor (url) {
-        this.BASE_SIZE = 512;
+    constructor (url, container) {
+        const min_dimension = Math.min(container.clientHeight, container.clientWidth);
+        const logb2 = Math.log(min_dimension) / Math.log(2);
+        const expt = Math.floor(logb2);
+        this.BASE_SIZE = Math.pow(2, expt);
         this.SIZE = this.BASE_SIZE;
         this.__createCanvas();
         this.load(url);
@@ -64,27 +67,19 @@ class Handler {
      * @return {ImageData}  [New ImageData from canvas slice]
      */
     __getAt (x, y) {
-        return this.context.getImageData(x, y, this.BASE_SIZE, this.BASE_SIZE);
-    }
-
-    // YOU SHOULD NOT USE THIS FUNCTION
-    /**
-     * Returns the transparency map of the current canvas
-     * @return {ImageData} [New ImageData from canvas slice]
-     * @private
-     */
-    __getTransparencyMap () {
-        let imageData = this.context.getImageData(0, 0, this.SIZE, this.SIZE);
-        let array = imageData.data;
+        let imageData = this.context.getImageData(x, y, this.BASE_SIZE, this.BASE_SIZE);
+        let base = imageData.data;
+        let array = new Uint8ClampedArray(base.length);
         let arrayLength = array.length;
 
         for (let i = 0; i < arrayLength; i+=4) {
-            array[i] = 0;
-            array[i + 1] = array[i + 3];
-            array[i + 2] = 0;
+            array[i + 1] = base[i + 3];
         }
 
-        return imageData;
+        return {
+            defaultMap: imageData,
+            transparencyMap: new ImageData(array, this.BASE_SIZE, this.BASE_SIZE)
+        };
     }
 
     /**

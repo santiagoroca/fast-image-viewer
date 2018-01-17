@@ -42,7 +42,7 @@ class GridSystem {
 	            index = this.division_ratio - 1 - parseInt(index);
 
             if (this.activeIndex != index) {
-                this.activeGrid.deactivate(webgl);
+                // this.activeGrid.deactivate(webgl);
                 this.activeIndex = index;
                 this.activeGrid = this.gridSystem[this.activeIndex];
                 this.handler.__resize(this.activeGrid.scale);
@@ -52,6 +52,12 @@ class GridSystem {
 
         this.activeGrid.render(webgl, shader, planes);
 	}
+
+	clear () {
+        for (let i = 0; i < this.gridSystem.length; i++) {
+            this.gridSystem[i].clear();
+        }
+    }
 
 }
 
