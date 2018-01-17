@@ -1,6 +1,6 @@
 {
   "name": "fast-image-viewer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Viewer optimized to use huge Image files",
   "main": "index.js",
   "directories": {
