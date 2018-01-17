@@ -9,7 +9,7 @@ deploy:
   api_key:
     secure: YEKVx50vhRzalTaxBA+2pOLg+Veu2Wzzgjfo5b3ihmD3qTil71mK8FRT//bku4FYglhmOORdoPz4lGeLw5CMwiIa8Sscgj+vP7vBMWAYCpt5ABrBdQYg7FqjsYUxxVK4LctNg7VNQyknaLGL/sa+gAqczYqxNPRXQ+VCBHGpFM6FmoaOrmN8b6k8jrx4+1oAWl4I2vytTJypekMnyixgD5AdqMKb6xHfMbS0h9WGCey+4eswdunmvZIBXqZXDsUcamLau1zQddP3onSsTPniBd7GhbkuDAyRB2L1WpcahuZNR1J8L0sKTnVeokOp6LRtiEZvQKieHGzfslMmfTb8ixOolyD3vbW60xDPHbnIupYg9fJZG/utE+hR1aETPx/GpHHWbMqXxzv9oGta9Mo0SNcQbhemGm/hvwoWWi03lzYLNiGDVLJnHqEtTHGVX/vbdDmG+4bjaEBgMbL/22tXjCGl4XHQqwEwV8JVVIhBMoJBfNPibv1caVcbLyai60iTxtsQ+5v3oyst2gltRLSjqEqXGB20ik+mepe9n/zBIShI6PVN2bM4PJdFh0+X/WKr6pURkbWI/ochSpQEhSO6rJFTqg4/cwH4ZGTdQIyqcJi+o4Z+/WovbVPxDmrgEEzV4j8v3xleul/TGt2Sj5nFk7UMjWg/C/AQB6//8GAtzpc=
   on:
-    repo: santiiiii/fast-svg-viewer
+    repo: santiiiii/fast-image-viewer
 branches:
   only:
   - master
