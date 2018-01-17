@@ -1,5 +1,5 @@
 
-# Fast Image Viewer
+# Fast Image Viewer [![Build Status](https://travis-ci.org/santiiiii/fast-image-viewer.svg?branch=master)](https://travis-ci.org/santiiiii/fast-image-viewer)
 
 Fast Image Viewer (FIV) allows you to Render Really big big, huge, files into a canvas and manipulate those images as if they were a Visualization tool in browser, all of this, simply embeded into any DOM Element.
 
